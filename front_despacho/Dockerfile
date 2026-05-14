@@ -1,9 +1,7 @@
 FROM node:20-alpine AS build
 WORKDIR /app
-ENV NODE_TLS_REJECT_UNAUTHORIZED=0
-RUN npm config set strict-ssl false
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build
 
