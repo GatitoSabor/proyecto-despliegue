@@ -1,0 +1,29 @@
+{
+  "family": "front-despacho",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::554885985551:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "front-despacho",
+      "image": "554885985551.dkr.ecr.us-east-2.amazonaws.com/front-despacho:latest",
+      "portMappings": [
+        { "containerPort": 8080, "protocol": "tcp" }
+      ],
+      "environment": [
+        { "name": "BACKEND_VENTAS_URL", "value": "http://BACKEND_VENTAS_ALB:8080" },
+        { "name": "BACKEND_DESPACHOS_URL", "value": "http://BACKEND_DESPACHOS_ALB:8081" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/front-despacho",
+          "awslogs-region": "us-east-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

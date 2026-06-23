@@ -1,0 +1,32 @@
+{
+  "family": "back-ventas",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::554885985551:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "back-ventas",
+      "image": "554885985551.dkr.ecr.us-east-2.amazonaws.com/back-ventas:latest",
+      "portMappings": [
+        { "containerPort": 8080, "protocol": "tcp" }
+      ],
+      "environment": [
+        { "name": "DB_ENDPOINT", "value": "DB_ENDPOINT_AQUI" },
+        { "name": "DB_PORT", "value": "3306" },
+        { "name": "DB_NAME", "value": "ventas_db" },
+        { "name": "DB_USERNAME", "value": "admin" },
+        { "name": "DB_PASSWORD", "value": "DB_PASSWORD_AQUI" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/back-ventas",
+          "awslogs-region": "us-east-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
