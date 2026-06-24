@@ -1,15 +1,16 @@
 FROM node:20-slim AS build
 WORKDIR /app
-COPY package.json ./
-RUN npm cache clean --force && npm install && ls node_modules/.bin/vite 2>&1 || echo "VITE MISSING"
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
-RUN node node_modules/vite/bin/vite.js build
+RUN npm run build
 
 FROM nginx:alpine
-RUN apk add --no-cache ca-certificates gettext
+# nginx:alpine ya incluye envsubst (/usr/bin/envsubst); no hace falta instalar gettext
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf.template
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# un checkout en Windows deja CRLF y rompe el shebang del entrypoint; normalizamos a LF
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]

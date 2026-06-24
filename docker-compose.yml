@@ -60,6 +60,10 @@ services:
     restart: always
     ports:
       - "80:8080"
+    environment:
+      # nginx hace envsubst de estas en proxy_pass; sin ellas nginx no arranca
+      BACKEND_VENTAS_URL: http://back-ventas:8080
+      BACKEND_DESPACHOS_URL: http://back-despachos:8081
     depends_on:
       - back-ventas
       - back-despachos
