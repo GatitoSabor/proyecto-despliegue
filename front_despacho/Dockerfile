@@ -1,7 +1,7 @@
-FROM node:20-alpine AS build
+FROM node:20-slim AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --include=dev && ls node_modules/.bin/
+RUN npm cache clean --force && npm install
 COPY . .
 RUN npm run build
 
