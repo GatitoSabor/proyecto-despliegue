@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm cache clean --force && npm install
 COPY . .
-RUN npm run build
+RUN npx --yes vite build
 
 FROM nginx:alpine
 RUN apk add --no-cache ca-certificates gettext
