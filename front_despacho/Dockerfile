@@ -1,9 +1,9 @@
 FROM node:20-slim AS build
 WORKDIR /app
-COPY package*.json ./
-RUN npm cache clean --force && npm install
+COPY package.json ./
+RUN npm cache clean --force && npm install && ls node_modules/.bin/vite 2>&1 || echo "VITE MISSING"
 COPY . .
-RUN npx --yes vite build
+RUN node node_modules/vite/bin/vite.js build
 
 FROM nginx:alpine
 RUN apk add --no-cache ca-certificates gettext
